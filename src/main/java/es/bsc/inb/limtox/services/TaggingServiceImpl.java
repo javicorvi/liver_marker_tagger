@@ -46,23 +46,23 @@ public class TaggingServiceImpl implements TaggingService{
 	
 	static final Logger taggingLog = Logger.getLogger("taggingLog");
 	
-	Map<String, LiverMarkerTerm> hepatotoxicityTermsDict = new HashMap<String, LiverMarkerTerm>();
+	Map<String, LiverMarkerTerm> liverMarkerTermsDict = new HashMap<String, LiverMarkerTerm>();
 	
 	public void execute(String propertiesParametersPath) {
 		try {
-			taggingLog.info("Tagging hepatotoxicity terms with properties :  " +  propertiesParametersPath);
+			taggingLog.info("Tagging liver marker terms with properties :  " +  propertiesParametersPath);
 			Properties propertiesParameters = this.loadPropertiesParameters(propertiesParametersPath);
 			taggingLog.info("Input directory with the articles to tag : " + propertiesParameters.getProperty("inputDirectory"));
 			taggingLog.info("Output directory : " + propertiesParameters.getProperty("outputDirectory"));
-			taggingLog.info(" hepatotoxicity dictionary used : " + propertiesParameters.getProperty("hepatotoxicityJSONDict"));
+			taggingLog.info(" liver marker dictionary used : " + propertiesParameters.getProperty("liverMarkerDict"));
 			
 			String inputDirectoryPath = propertiesParameters.getProperty("inputDirectory");
 			String outputDirectoryPath = propertiesParameters.getProperty("outputDirectory");
-			String hepatotoxicityJSONDict = propertiesParameters.getProperty("hepatotoxicityJSONDict");
+			String liverMarkerJSONDict = propertiesParameters.getProperty("liverMarkerDict");
 			Integer index_id = new Integer(propertiesParameters.getProperty("index_id"));
 			Integer index_text_to_tag = new Integer(propertiesParameters.getProperty("index_text_to_tag"));
 			
-			//curateDict(hepatotoxicityJSONDict, hepatotoxicityJSONDict + "_new.json");
+			//curateDict(liverMarkerJSONDict, liverMarkerJSONDict + "_new.json");
 			
 			File inputDirectory = new File(inputDirectoryPath);
 		    if(!inputDirectory.exists()) {
@@ -75,8 +75,8 @@ public class TaggingServiceImpl implements TaggingService{
 		    if(!outputDirectory.exists())
 		    	outputDirectory.mkdirs();
 		    
-		    String rulesPathOutput = "hepatotoxicity_rules.txt";
-		    generateRulesForTagging(hepatotoxicityJSONDict, rulesPathOutput);
+		    String rulesPathOutput = "liver_marker_rules.txt";
+		    generateRulesForTagging(liverMarkerJSONDict, rulesPathOutput);
 		    
 			Properties props = new Properties();
 			props.put("annotators", "tokenize, ssplit, regexner, entitymentions");
@@ -94,9 +94,8 @@ public class TaggingServiceImpl implements TaggingService{
 					String outputFilePath = outputDirectory + File.separator + fileName;
 					BufferedWriter outPutFile = new BufferedWriter(new FileWriter(outputFilePath));
 					
-					outPutFile.write("id\tstartOffset\tendOffset\ttext\tentityType\tetox_mapping_id\tmesh_omim_mapping_id\tmouse_pathology_mapping_id\t"
-							+ "medra_mapping_id\tgemina_sympton_mapping_id\tdisease_ontology_mapping_id\tadverse_events_mapping_id\thuman_phenotype_mapping_id\tefpia_mapping_id\t" + 
-				        	"mpheno_mapping_id\tcostart_concept\n");
+					outPutFile.write("id\tstartOffset\tendOffset\ttext\tentityType\tmarker_namespace\tmarker_identifier\tmarker_normalization\t"
+							+ "concept_namespace\tmarker_type_name\n");
 					outPutFile.flush();
 					for (String line : ObjectBank.getLineIterator(file_to_classify.getAbsolutePath(), "utf-8")) {
 						try {
@@ -122,23 +121,23 @@ public class TaggingServiceImpl implements TaggingService{
 
 
 	/**
-	 * Curate the hepatotoxicity Limtox Dictionary, run only one time to remove the duplicates original_entry now every thing is lowew case.
+	 * Curate the liver marker Limtox Dictionary, run only one time to remove the duplicates original_entry now every thing is lowew case.
 	 * @param inputPath
 	 * @param outputPath
 	 */
 	private void curateDict(String inputPath, String outputPath) {
-		List<LiverMarkerTerm> hepatotoxicityTerms = this.findAll(inputPath);
-		Map<String, LiverMarkerTerm> hepatotoxicityTermsCurated = new HashMap<String, LiverMarkerTerm>();
-		for (LiverMarkerTerm hepatotoxicityTerm : hepatotoxicityTerms) {
-			if(hepatotoxicityTermsCurated.get(hepatotoxicityTerm.getOriginal_entry().toLowerCase())!=null) {
-				taggingLog.warn("The key alreay exist : " + hepatotoxicityTerm.getOriginal_entry());
+		List<LiverMarkerTerm> liverMarkerTerms = this.findAll(inputPath);
+		Map<String, LiverMarkerTerm> liverMarkerTermsCurated = new HashMap<String, LiverMarkerTerm>();
+		for (LiverMarkerTerm liverMarkerTerm : liverMarkerTerms) {
+			liverMarkerTerm.toLowerCase();
+			if(liverMarkerTermsCurated.get(liverMarkerTerm.getMarker_full_name())!=null) {
+				taggingLog.warn("The key alreay exist : " + liverMarkerTerm.getMarker_full_name());
 			}else {
-				hepatotoxicityTermsCurated.put(hepatotoxicityTerm.getOriginal_entry().toLowerCase(), hepatotoxicityTerm);
+				liverMarkerTermsCurated.put(liverMarkerTerm.getMarker_full_name().toLowerCase(), liverMarkerTerm);
 			}
 		}
-		taggingLog.warn("Original Dict size : " + hepatotoxicityTerms.size() + ", curated Dict size : " + hepatotoxicityTermsCurated.size());
-		generateJSONFile(hepatotoxicityTermsCurated.values(), outputPath);
-		
+		taggingLog.warn("Original Dict size : " + liverMarkerTerms.size() + ", curated Dict size : " + liverMarkerTermsCurated.size());
+		generateJSONFile(liverMarkerTermsCurated.values(), outputPath);
 	}
 
 	@SuppressWarnings("unused")
@@ -163,15 +162,15 @@ public class TaggingServiceImpl implements TaggingService{
 			}
 
 	private Map<String, LiverMarkerTerm> generateRulesForTagging(String inputPath,String outputPath) throws IOException {
-		List<LiverMarkerTerm> hepatotoxicityTerms = this.findAll(inputPath);
-		BufferedWriter hepatotoxicityDictWriter = new BufferedWriter(new FileWriter(outputPath));
-		for (LiverMarkerTerm hepatotoxicityTerm : hepatotoxicityTerms) {
-			hepatotoxicityDictWriter.write(this.removeInvalidCharacters(hepatotoxicityTerm.getOriginal_entry()) + "\t" + "HEPATOTOXICITY\n");
-			hepatotoxicityDictWriter.flush();
-			hepatotoxicityTermsDict.put(hepatotoxicityTerm.getOriginal_entry(), hepatotoxicityTerm);
+		List<LiverMarkerTerm> liverMarkerTerms = this.findAll(inputPath);
+		BufferedWriter liverMarkerDictWriter = new BufferedWriter(new FileWriter(outputPath));
+		for (LiverMarkerTerm liverMarkerTerm : liverMarkerTerms) {
+			liverMarkerDictWriter.write(this.removeInvalidCharacters(liverMarkerTerm.getMarker_full_name()) + "\t" + "liver_marker\n");
+			liverMarkerDictWriter.flush();
+			liverMarkerTermsDict.put(liverMarkerTerm.getMarker_full_name(), liverMarkerTerm);
 		}
-		hepatotoxicityDictWriter.close();
-		return hepatotoxicityTermsDict;
+		liverMarkerDictWriter.close();
+		return liverMarkerTermsDict;
 	}
 	
 	/**
@@ -219,7 +218,7 @@ public class TaggingServiceImpl implements TaggingService{
 		try {
 			String json_string = readJsonFile(path);
 			JsonNode rootNode = mapper.readTree(json_string);
-			//JsonNode data = rootNode.path("hepatotoxicity");
+			//JsonNode data = rootNode.path("liver_marker");
 			List<LiverMarkerTerm> myObjects = Arrays.asList(mapper.readValue(rootNode.toString(), LiverMarkerTerm[].class));
 			return myObjects;
 		} catch (JsonParseException e) {
@@ -267,19 +266,17 @@ public class TaggingServiceImpl implements TaggingService{
     			try {
     				String keyword = entityMention.get(TextAnnotation.class);
         			String entityType = entityMention.get(CoreAnnotations.EntityTypeAnnotation.class);
-			        if(entityType!=null && entityType.equals("HEPATOTOXICITY")) {
+			        if(entityType!=null && entityType.equals("liver_marker")) {
 			        	CoreLabel token = entityMention.get(TokensAnnotation.class).get(0);
-			        	LiverMarkerTerm hepatotoxicityTerm = hepatotoxicityTermsDict.get(keyword);
+			        	LiverMarkerTerm hepatotoxicityTerm = liverMarkerTermsDict.get(keyword);
 			        	if(hepatotoxicityTerm!=null) {
 			        		output.write(id + "\t"+ token.beginPosition() + "\t" + (token.beginPosition() + keyword.length())  + "\t" + keyword + "\t" + entityType.toLowerCase() + "\t" + 
-						        	hepatotoxicityTerm.getEtox_mapping_id() + "\t" + hepatotoxicityTerm.getMesh_omim_mapping_id() + "\t" + hepatotoxicityTerm.getMouse_pathology_mapping_id() + "\t" + 
-						        	hepatotoxicityTerm.getMedDRA_mapping_id() + "\t" + hepatotoxicityTerm.getGemina_sympton_mapping_id() + "\t" + hepatotoxicityTerm.getDisease_ontology_mapping_id() + "\t" + 
-						        	hepatotoxicityTerm.getAdverse_events_mapping_id() + "\t" + hepatotoxicityTerm.getHuman_phenotype_mapping_id() + "\t" + hepatotoxicityTerm.getEFPIA_mapping_id() + "\t" + 
-						        	hepatotoxicityTerm.getMPheno_mapping_id() + "\t" + hepatotoxicityTerm.getCOSTART_concept() + "\n");
+						        	hepatotoxicityTerm.getMarker_namespace() + "\t" + hepatotoxicityTerm.getMarker_identifier() + "\t" + hepatotoxicityTerm.getMarker_normalization() + "\t" + 
+						        	hepatotoxicityTerm.getConcept_namespace() + "\t" + hepatotoxicityTerm.getMarker_type_name() + "\n");
 			        	} else {
 			        		//revisar el tipo de ner que se esta utilizando hay casos en que encuentra cosas que no estan en el listado, creo que es porque se usa combinedner.
 			        		output.write(id + "\t"+ token.beginPosition() + "\t" + (token.beginPosition() + keyword.length())  + "\t" + keyword + "\t" + entityType + "\t null \t null \t null \t null \t" + 
-			        		 "null \t null \t null \t null \t null \t null \t null \n");
+			        		 "null\n");
 			        		taggingLog.warn("Entry not found " + keyword);
 			        	}
 			        	output.flush();

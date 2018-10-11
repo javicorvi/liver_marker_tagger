@@ -7,263 +7,88 @@ public class LiverMarkerTerm {
 	
 	private Integer keyId;
 	
-	private String etox_mapping_id;
+	private String marker_full_name;
 	
-	private String mesh_omim_mapping_id;
+	private String marker_namespace;
 	
-	private String mouse_pathology_mapping_id;
+	private String marker_identifier;
 	
-    private String MedDRA_mapping_id;
-    
-    private String gemina_sympton_mapping_id;
-    
-    private String disease_ontology_mapping_id;
-    
-    private String speech_entry;
-    
-    private String polysearch_mapping_id;
-    
-    private String adverse_events_mapping_id;
-    
-    private String stemmed_entry;
-    
-    private String original_entry;
-    
-    private String human_phenotype_mapping_id;
-    
-	private String EFPIA_mapping_id;
+	private String marker_normalization;
 	
-	private String mapped;
+	private String concept_namespace;
 	
-	private String MPheno_mapping_id;
-	
-	private String COSTART_concept;
-	
-	public void toLowerCase() {
-		if(original_entry!=null && !original_entry.equals(original_entry.toLowerCase())) {
-			original_entry=original_entry.toLowerCase();
-		}
-	}
-	
-	
-	
+	private String marker_type_name;
+
 	public Integer getKeyId() {
 		return keyId;
 	}
-
-
 
 	public void setKeyId(Integer keyId) {
 		this.keyId = keyId;
 	}
 
-
-
-	public String getEtox_mapping_id() {
-		return etox_mapping_id;
+	public String getMarker_full_name() {
+		return marker_full_name;
 	}
 
-	public void setEtox_mapping_id(String etox_mapping_id) {
-		if(etox_mapping_id!=null && etox_mapping_id.trim().equals("NA")) {
-			this.etox_mapping_id = null;
-		}else {
-			this.etox_mapping_id = etox_mapping_id;
-		}
-		
+	public void setMarker_full_name(String marker_full_name) {
+		this.marker_full_name = marker_full_name;
 	}
 
-	public String getMesh_omim_mapping_id() {
-		return mesh_omim_mapping_id;
+	public String getMarker_namespace() {
+		return marker_namespace;
 	}
 
-	public void setMesh_omim_mapping_id(String mesh_omim_mapping_id) {
-		if(mesh_omim_mapping_id!=null && mesh_omim_mapping_id.trim().equals("NA")) {
-			this.mesh_omim_mapping_id = null;
-		}else {
-			this.mesh_omim_mapping_id = mesh_omim_mapping_id;
-		}
-		
+	public void setMarker_namespace(String marker_namespace) {
+		this.marker_namespace = marker_namespace;
 	}
 
-	public String getMouse_pathology_mapping_id() {
-		return mouse_pathology_mapping_id;
+	public String getMarker_identifier() {
+		return marker_identifier;
 	}
 
-	public void setMouse_pathology_mapping_id(String mouse_pathology_mapping_id) {
-		if(mouse_pathology_mapping_id!=null && mouse_pathology_mapping_id.trim().equals("NA")) {
-			this.mouse_pathology_mapping_id = null;
-		}else {
-			this.mouse_pathology_mapping_id = mouse_pathology_mapping_id;
-		}
-		
+	public void setMarker_identifier(String marker_identifier) {
+		this.marker_identifier = marker_identifier;
 	}
 
-	public String getMedDRA_mapping_id() {
-		return MedDRA_mapping_id;
+	public String getMarker_normalization() {
+		return marker_normalization;
 	}
 
-	public void setMedDRA_mapping_id(String medDRA_mapping_id) {
-		if(MedDRA_mapping_id!=null && MedDRA_mapping_id.trim().equals("NA")) {
-			this.MedDRA_mapping_id = null;
-		}else {
-			MedDRA_mapping_id = medDRA_mapping_id;
-		}
-		
+	public void setMarker_normalization(String marker_normalization) {
+		this.marker_normalization = marker_normalization;
 	}
 
-	public String getGemina_sympton_mapping_id() {
-		return gemina_sympton_mapping_id;
+	public String getConcept_namespace() {
+		return concept_namespace;
 	}
 
-	public void setGemina_sympton_mapping_id(String gemina_sympton_mapping_id) {
-		if(gemina_sympton_mapping_id!=null && gemina_sympton_mapping_id.trim().equals("NA")) {
-			this.gemina_sympton_mapping_id = null;
-		}else {
-			this.gemina_sympton_mapping_id = gemina_sympton_mapping_id;
-		}
-		
+	public void setConcept_namespace(String concept_namespace) {
+		this.concept_namespace = concept_namespace;
 	}
 
-	public String getDisease_ontology_mapping_id() {
-		return disease_ontology_mapping_id;
+	public String getMarker_type_name() {
+		return marker_type_name;
 	}
 
-	public void setDisease_ontology_mapping_id(String disease_ontology_mapping_id) {
-		if(disease_ontology_mapping_id!=null && disease_ontology_mapping_id.trim().equals("NA")) {
-			this.disease_ontology_mapping_id = null;
-		}else {
-			this.disease_ontology_mapping_id = disease_ontology_mapping_id;
-		}
-		
+	public void setMarker_type_name(String marker_type_name) {
+		this.marker_type_name = marker_type_name;
 	}
-
-	public String getSpeech_entry() {
-		return speech_entry;
-	}
-
-	public void setSpeech_entry(String speech_entry) {
-		if(speech_entry!=null && speech_entry.trim().equals("NA")) {
-			this.speech_entry = null;
-		}else {
-			this.speech_entry = speech_entry;
-		}
-		
-	}
-
-	public String getPolysearch_mapping_id() {
-		return polysearch_mapping_id;
-	}
-
-	public void setPolysearch_mapping_id(String polysearch_mapping_id) {
-		if(polysearch_mapping_id!=null && polysearch_mapping_id.trim().equals("NA")) {
-			this.polysearch_mapping_id = null;
-		}else {
-			this.polysearch_mapping_id = polysearch_mapping_id;
-		}
-	}
-
-	public String getAdverse_events_mapping_id() {
-		return adverse_events_mapping_id;
-	}
-
-	public void setAdverse_events_mapping_id(String adverse_events_mapping_id) {
-		if(adverse_events_mapping_id!=null && adverse_events_mapping_id.trim().equals("NA")) {
-			this.adverse_events_mapping_id = null;
-		}else {
-			this.adverse_events_mapping_id = adverse_events_mapping_id;
-		}
-		
-	}
-
-	public String getStemmed_entry() {
-		return stemmed_entry;
-	}
-
-	public void setStemmed_entry(String stemmed_entry) {
-		this.stemmed_entry = stemmed_entry;
-	}
-
-	public String getOriginal_entry() {
-		return original_entry;
-	}
-
-	public void setOriginal_entry(String original_entry) {
-		this.original_entry = original_entry;
-	}
-
-	public String getHuman_phenotype_mapping_id() {
-		return human_phenotype_mapping_id;
-	}
-
-	public void setHuman_phenotype_mapping_id(String human_phenotype_mapping_id) {
-		if(human_phenotype_mapping_id!=null && human_phenotype_mapping_id.trim().equals("NA")) {
-			this.human_phenotype_mapping_id = null;
-		}else {
-			this.human_phenotype_mapping_id = human_phenotype_mapping_id;
-		}
-		
-	}
-
-	public String getEFPIA_mapping_id() {
-		return EFPIA_mapping_id;
-	}
-
-	public void setEFPIA_mapping_id(String eFPIA_mapping_id) {
-		if(EFPIA_mapping_id!=null && EFPIA_mapping_id.trim().equals("NA")) {
-			this.EFPIA_mapping_id = null;
-		}else {
-			EFPIA_mapping_id = eFPIA_mapping_id;
-		}
-		
-	}
-
-	public String getMapped() {
-		return mapped;
-	}
-
-	public void setMapped(String mapped) {
-		this.mapped = mapped;
-	}
-
-	public String getMPheno_mapping_id() {
-		return MPheno_mapping_id;
-	}
-
-	public void setMPheno_mapping_id(String mPheno_mapping_id) {
-		if(MPheno_mapping_id!=null && MPheno_mapping_id.trim().equals("NA")) {
-			this.MPheno_mapping_id = null;
-		}else {
-			MPheno_mapping_id = mPheno_mapping_id;
-		}
-		
-	}
-
-	public String getCOSTART_concept() {
-		return COSTART_concept;
-	}
-
-	public void setCOSTART_concept(String cOSTART_concept) {
-		if(COSTART_concept!=null && COSTART_concept.trim().equals("NA")) {
-			this.COSTART_concept = null;
-		}else {
-			COSTART_concept = cOSTART_concept;
-		}
-	}
-
 	
-	public Integer getId() {
-		// TODO Auto-generated method stub
-		return null;
+	public void toLowerCase() {
+		if(marker_full_name!=null) {
+			marker_full_name=marker_full_name.toLowerCase();
+		}
 	}
-
+	
 	@Override
     public boolean equals(Object obj) {
 	    if (obj == null) {
 	        return false;
-	    }else if(original_entry==null || ((LiverMarkerTerm)obj).original_entry==null) {
+	    }else if(marker_full_name==null || ((LiverMarkerTerm)obj).marker_full_name==null) {
 	    	return false;
 	    }else {
-	    	if(original_entry.equals(((LiverMarkerTerm)obj).original_entry)) {
+	    	if(marker_full_name.equals(((LiverMarkerTerm)obj).marker_full_name)) {
 	    		return true;
 	    	}
 	    	return false;
@@ -273,8 +98,7 @@ public class LiverMarkerTerm {
 
 	@Override
 	public int hashCode() {
-	    return original_entry.hashCode();
+	    return marker_full_name.hashCode();
 	}
-	
-	
+   
 }
